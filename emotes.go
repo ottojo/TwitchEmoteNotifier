@@ -10,8 +10,7 @@ import (
 
 func downloadFullEmoteSet() EmoteSet {
 	client := &http.Client{}
-	//req, err := http.NewRequest("GET", "https://api.twitch.tv/kraken/chat/emoticon_images", nil)
-	req, err := http.NewRequest("GET", "https://cdn.jonasotto.com/emotesNew.json", nil)
+	req, err := http.NewRequest("GET", "https://api.twitch.tv/kraken/chat/emoticon_images", nil)
 	checkError(err)
 
 	clientId, clientIdAvailiable := os.LookupEnv("TEN_CLIENT_ID")
