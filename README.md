@@ -1,5 +1,5 @@
 # TwitchEmoteNotifier
-Twitter bot that tweets about new twitch.tv emotes @twitch_emotes
+Twitter bot that tweets about new twitch.tv emotes [@twitch_emotes](https://twitter.com/twitch_emotes)
 
 Set the following environment variables:
 
