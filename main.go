@@ -11,11 +11,12 @@ import (
 	"path/filepath"
 	"strconv"
 	"time"
+	"fmt"
 )
 
 func main() {
 	//Load old Emotes from file specified as command line argument
-	log.Println("Loading old Emote Set...")
+	fmt.Println("Loading old Emote Set...")
 	emoteFile, err := filepath.Abs(os.Args[1])
 	if err != nil {
 		log.Fatal(err)
@@ -24,22 +25,22 @@ func main() {
 	checkError(err)
 	var oldEmoteSet EmoteSet
 	json.Unmarshal(oldEmotesFile, &oldEmoteSet)
-	log.Println("done")
+	fmt.Println("done")
 
 	//Download new Emotes
-	log.Println("Downloading new Emote Set...")
+	fmt.Println("Downloading new Emote Set...")
 	newEmoteSet := downloadFullEmoteSet()
-	log.Println("done")
+	fmt.Println("done")
 
 	//Compare new Emotes against old Emotes
-	log.Println("Comparing Emotes...")
+	fmt.Println("Comparing Emotes...")
 	newEmotes, removedEmotes := compareEmoteSets(oldEmoteSet, newEmoteSet)
-	log.Println("done")
+	fmt.Println("done")
 
-	log.Println("New Emotes:")
-	log.Println(newEmotes)
-	log.Println("Removed Emotes:")
-	log.Println(removedEmotes)
+	fmt.Println("New Emotes:")
+	fmt.Println(newEmotes)
+	fmt.Println("Removed Emotes:")
+	fmt.Println(removedEmotes)
 
 	//Save new Emotes
 	emoteSetBytes, err := json.Marshal(newEmoteSet)
@@ -47,7 +48,7 @@ func main() {
 	ioutil.WriteFile(emoteFile, emoteSetBytes, 0644)
 
 	//Set up twitter
-	log.Println("Setting up twitter...")
+	fmt.Println("Setting up twitter...")
 	twitterConsumerKey, twitterConsumerKeyAvailiable := os.LookupEnv("TEN_CONSUMER_KEY")
 	if !twitterConsumerKeyAvailiable {
 		log.Fatal("Environment Variable \"TEN_CONSUMER_KEY\" not availiable.")
@@ -71,11 +72,11 @@ func main() {
 	api := anaconda.NewTwitterApi(twitterAccessToken, twitterAccessTokenSecret)
 	defer api.Close()
 	api.EnableThrottling(10*time.Second, 10000000)
-	log.Println("done")
+	fmt.Println("done")
 
-	log.Println("Tweeting Changes...")
+	fmt.Println("Tweeting Changes...")
 	tweetChanges(api, newEmotes, removedEmotes)
-	log.Println("done")
+	fmt.Println("done")
 }
 
 func tweetChanges(api *anaconda.TwitterApi, newEmotes, removedEmotes []Emote) {
@@ -87,13 +88,13 @@ func tweetChanges(api *anaconda.TwitterApi, newEmotes, removedEmotes []Emote) {
 		tweetParams.Set("media_ids", media.MediaIDString)
 		tweet := "New: " + emote.Code
 		api.PostTweet(tweet, tweetParams)
-		log.Println("Tweeted: \"" + tweet + "\"")
+		fmt.Println("Tweeted: \"" + tweet + "\"")
 	}
 
 	for _, emote := range removedEmotes {
 		tweetParams := url.Values{}
 		tweet := "Removed: " + emote.Code
 		api.PostTweet(tweet, tweetParams)
-		log.Println("Tweeted: \"" + tweet + "\"")
+		fmt.Println("Tweeted: \"" + tweet + "\"")
 	}
 }

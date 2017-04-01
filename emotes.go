@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"fmt"
 )
 
 func downloadFullEmoteSet() EmoteSet {
@@ -36,14 +37,14 @@ func downloadFullEmoteSet() EmoteSet {
 }
 
 func compareEmoteSets(oldSet EmoteSet, newSet EmoteSet) (newEmotes []Emote, removedEmotes []Emote) {
-	log.Println("Searching for new Emotes")
+	fmt.Println("Searching for new Emotes")
 	for _, emote := range newSet.Emotes {
 		if !containsEmote(oldSet, emote) {
 			newEmotes = append(newEmotes, emote)
 		}
 	}
 
-	log.Println("Searching for removed Emotes")
+	fmt.Println("Searching for removed Emotes")
 	for _, emote := range oldSet.Emotes {
 		if !containsEmote(newSet, emote) {
 			removedEmotes = append(removedEmotes, emote)
