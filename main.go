@@ -94,7 +94,7 @@ func tweetChanges(api *anaconda.TwitterApi, newEmotes, removedEmotes []Emote) {
 
 	for i := 0; i < len(removedEmotes); {
 		tweet := "Removed: " + ""
-		for (len(tweet) + len(removedEmotes[i].Code)) <= 140 {
+		for i < len(removedEmotes) && ((len(tweet) + len(removedEmotes[i].Code)) <= 140) {
 			tweet += removedEmotes[i].Code + ", "
 			i++
 		}
