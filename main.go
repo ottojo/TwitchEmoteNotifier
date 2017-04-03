@@ -72,7 +72,7 @@ func main() {
 	}
 	api := anaconda.NewTwitterApi(twitterAccessToken, twitterAccessTokenSecret)
 	defer api.Close()
-	api.EnableThrottling(10*time.Second, 10000000)
+	api.EnableThrottling(10*time.Second, 1)
 	fmt.Println("done")
 
 	fmt.Println("Tweeting Changes...")
