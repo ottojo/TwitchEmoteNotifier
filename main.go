@@ -12,6 +12,7 @@ import (
 	"strconv"
 	"time"
 	"fmt"
+	"strings"
 )
 
 func main() {
@@ -91,9 +92,14 @@ func tweetChanges(api *anaconda.TwitterApi, newEmotes, removedEmotes []Emote) {
 		fmt.Println("Tweeted: \"" + tweet + "\"")
 	}
 
-	for _, emote := range removedEmotes {
+	for i := 0; i < len(removedEmotes); {
+		tweet := "Removed: " + ""
+		for (len(tweet) + len(removedEmotes[i].Code)) <= 140 {
+			tweet += removedEmotes[i].Code + ", "
+			i++
+		}
 		tweetParams := url.Values{}
-		tweet := "Removed: " + emote.Code
+		tweet = strings.TrimSuffix(tweet, ", ")
 		api.PostTweet(tweet, tweetParams)
 		fmt.Println("Tweeted: \"" + tweet + "\"")
 	}
